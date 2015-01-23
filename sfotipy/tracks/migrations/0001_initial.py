@@ -7,6 +7,8 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('albums', '__first__'),
+        ('artists', '__first__'),
     ]
 
     operations = [
@@ -17,6 +19,8 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=255)),
                 ('order', models.PositiveIntegerField()),
                 ('track_file', models.FileField(upload_to=b'tracks')),
+                ('album', models.ForeignKey(to='albums.Album')),
+                ('artist', models.ForeignKey(to='artists.Artist')),
             ],
             options={
             },

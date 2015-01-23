@@ -16,7 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('title', models.CharField(max_length=255)),
-                ('cover', models.FileField(upload_to=b'albums')),
+                ('cover', models.ImageField(upload_to=b'albums')),
                 ('artist', models.ForeignKey(to='artists.Artist')),
             ],
             options={
