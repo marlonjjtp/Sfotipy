@@ -2,10 +2,20 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title></title>
+	<title>Track {{titulo}}</title>
 </head>
 <body>
 	<section>
+		<ul>
+			{% for track in tracks %}
+			<li>
+				<a href="{{track.get_absolute_url}}">{{track.title}}</a>
+				{% if track == selected_track %}
+				-------------
+				{% endif %}
+			</li>
+			{% endfor %}
+		</ul>
 		<p>
 			Title: {{track.title}}
 		</p>

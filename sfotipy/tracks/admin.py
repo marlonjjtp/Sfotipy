@@ -2,4 +2,19 @@ from django.contrib import admin
 
 from .models import Track
 
-admin.site.register(Track)
+from actions import export_as_excel
+
+class TrackAdmin(admin.ModelAdmin):
+	list_display = ('title', 'artist', 'order', 'album', 'player', 'es_pharrel')
+	list_filter = ('artist', 'album')
+	search_fields = ('title', 'artist__first_name')
+	list_editable = ('album',)
+	actions = (export_as_excel, )
+
+	def es_pharrel(self, obj):
+		return obj.id == 1
+
+	es_pharrel.boolean = True
+
+admin.site.register(Track, TrackAdmin)
+
