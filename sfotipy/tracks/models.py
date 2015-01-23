@@ -5,3 +5,5 @@ class Track(models.Model):
 	order = models.PositiveIntegerField()
 	track_file = models.FileField(upload_to='tracks')
 
+	def __unicode__(self):
+		return self.title
