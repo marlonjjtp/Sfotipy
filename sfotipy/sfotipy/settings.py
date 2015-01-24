@@ -24,7 +24,7 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost']
 
 
 # Application definition
@@ -52,9 +52,11 @@ INSTALLED_APPS = (
     'mockups',
     'django_extensions',
     'rest_framework',
+    'sorl.thumbnail',
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -63,7 +65,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 #    'sfotipy.middleware.PaisMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
+
 )
+
+CACHE_MIDDLEWARE_ANONYMOUS_ONLY = True
 
 ROOT_URLCONF = 'sfotipy.urls'
 
@@ -98,8 +104,29 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+)
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.CachedStaticFilesStorage'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'redis_cache.RedisCache',
+        'LOCATION': 'localhost:6379',
+        'OPTIONS': {
+            'DB': 1,
+            # 'PASSWORD': 'yadaydyaa'
+            'PARSER_CLASS': 'redis.connection.HiredisParser'
+        }
+    }
+}
+
+DEFAULT_CACHE_ALIAS = 'default'
+
 
 MEDIA_ROOT = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2]+['media'])
+STATIC_ROOT = os.sep.join(os.path.abspath(__file__).split(os.sep)[:-2]+['content'])
 MEDIA_URL = '/media/'
 
 # backends
@@ -111,3 +138,8 @@ MEDIA_URL = '/media/'
 
 # grappelli 
 GRAPPELLI_ADMIN_TITLE = 'sfotipy'
+
+# guarda sesion en db primero, luego usa cache
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+# usa cache directamente, pierde sesiones
+#SESSION_ENGINE = 'django.contrib.sessions.backends.cache'

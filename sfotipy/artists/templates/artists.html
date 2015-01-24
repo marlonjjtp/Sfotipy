@@ -1,0 +1,12 @@
+{% load static from staticfiles %}
+{% if fav_artist %}
+Pagina de Artista:
+{{fav_artist.first_name}} {{fav_artist.last_name}}
+{% else %}
+Listado de Artistas:
+{% for a in artists %}
+{{a}}
+{% endfor %}
+
+{% endif %}
+<img src="{% static "wallhaven-88431.jpg"%}">
